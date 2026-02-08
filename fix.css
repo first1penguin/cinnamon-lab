@@ -1,0 +1,22 @@
+/* ========================================
+   페이지 전환 FIX - 가장 먼저 로드
+   ======================================== */
+.page {
+    display: none !important;
+}
+
+.page.active {
+    display: flex !important;
+}
+
+#login-page.active,
+#password-setup-page.active {
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
+
+#main-app.active {
+    display: flex !important;
+    min-height: 100vh;
+}

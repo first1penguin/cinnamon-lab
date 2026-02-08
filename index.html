@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Working Together Review 🤝</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
+    <style>
+        /* 페이지 전환 FIX */
+        .page {
+            display: none !important;
+        }
+        .page.active {
+            display: flex !important;
+        }
+        #login-page.active,
+        #password-setup-page.active {
+            min-height: 100vh;
+            align-items: center;
+            justify-content: center;
+        }
+        #main-app.active {
+            display: flex !important;
+            min-height: 100vh;
+        }
+        
+        /* Powered by 스타일 */
+        .powered-by {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e2e8f0;
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+        .powered-by strong {
+            color: #2563eb;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+    </style>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- 로그인 페이지 -->
+    <div id="login-page" class="page active">
+        <div class="login-container">
+            <div class="login-header">
+                <i class="fas fa-users-cog"></i>
+                <h1 id="system-title-display">Working Together Review 🤝</h1>
+            </div>
+            <form id="login-form" class="login-form">
+                <div class="form-group">
+                    <label for="login-name"><i class="fas fa-user"></i> 이름</label>
+                    <input type="text" id="login-name" placeholder="이름을 입력하세요">
+                </div>
+                <div class="form-group">
+                    <label for="login-password"><i class="fas fa-lock"></i> 비밀번호</label>
+                    <input type="password" id="login-password" placeholder="비밀번호를 입력하세요">
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-sign-in-alt"></i> 로그인
+                </button>
+                <div id="login-error" class="error-message"></div>
+                <div class="powered-by">
+                    powered by <strong>CINNAMON LAB</strong>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 비밀번호 설정 페이지 -->
+    <div id="password-setup-page" class="page">
+        <div class="login-container">
+            <div class="login-header">
+                <i class="fas fa-key"></i>
+                <h1>비밀번호 설정</h1>
+                <p>첫 로그인입니다. 비밀번호를 설정해주세요.</p>
+            </div>
+            <form id="password-setup-form" class="login-form">
+                <div class="form-group">
+                    <label for="setup-password"><i class="fas fa-lock"></i> 새 비밀번호</label>
+                    <input type="password" id="setup-password" placeholder="비밀번호 (최소 4자)">
+                </div>
+                <div class="form-group">
+                    <label for="setup-password-confirm"><i class="fas fa-lock"></i> 비밀번호 확인</label>
+                    <input type="password" id="setup-password-confirm" placeholder="비밀번호 확인">
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-check"></i> 비밀번호 설정
+                </button>
+                <div id="setup-error" class="error-message"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 메인 앱 -->
+    <div id="main-app" class="page">
+        <aside id="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-chart-line"></i>
+                <span id="sidebar-title-display">Review 🤝</span>
+            </div>
+            <nav id="sidebar-nav"></nav>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <i class="fas fa-user-circle"></i>
+                    <div class="user-details">
+                        <span id="user-name" class="user-name"></span>
+                        <span id="user-role" class="user-role"></span>
+                    </div>
+                </div>
+                <button id="logout-btn" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> 로그아웃
+                </button>
+            </div>
+        </aside>
+
+        <main id="main-content">
+            <header class="content-header">
+                <h1 id="page-title">대시보드</h1>
+                <div class="header-actions">
+                    <span id="current-time"></span>
+                </div>
+            </header>
+            <div id="page-content" class="page-content"></div>
+        </main>
+    </div>
+
+    <!-- 직원 모달 -->
+    <div id="employee-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="employee-modal-title">직원 추가</h3>
+                <button class="modal-close" onclick="closeEmployeeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="emp-name">이름 *</label>
+                    <input type="text" id="emp-name" placeholder="팀원 이름">
+                </div>
+                <div class="form-group">
+                    <label for="emp-team">팀 *</label>
+                    <select id="emp-team">
+                        <option value="">팀 선택</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="emp-role">역할 *</label>
+                    <select id="emp-role">
+                        <option value="employee">팀원</option>
+                        <option value="team_leader">팀장</option>
+                        <option value="admin">관리자</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="emp-password">초기 비밀번호 (선택)</label>
+                    <input type="password" id="emp-password" placeholder="미설정 시 첫 로그인에 설정">
+                    <small>비워두면 첫 로그인 시 해당 직원이 직접 설정합니다.</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeEmployeeModal()">취소</button>
+                <button class="btn btn-primary" id="save-employee-btn">저장</button>
+            </div>
+            <div id="employee-modal-error" class="error-message"></div>
+        </div>
+    </div>
+
+    <!-- 팀 모달 -->
+    <div id="team-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="team-modal-title">팀 추가</h3>
+                <button class="modal-close" onclick="closeTeamModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="team-id">팀 ID *</label>
+                    <input type="text" id="team-id" placeholder="예: BA, BD, BE (2-4자)">
+                    <small>팀 ID는 수정할 수 없습니다.</small>
+                </div>
+                <div class="form-group">
+                    <label for="team-name">팀 이름 *</label>
+                    <input type="text" id="team-name" placeholder="팀 이름">
+                </div>
+                <div class="form-group">
+                    <label for="team-color">팀 색상 *</label>
+                    <div class="color-picker-container">
+                        <input type="color" id="team-color" value="#3b82f6">
+                        <span id="team-color-preview" class="color-preview"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeTeamModal()">취소</button>
+                <button class="btn btn-primary" id="save-team-btn">저장</button>
+            </div>
+            <div id="team-modal-error" class="error-message"></div>
+        </div>
+    </div>
+
+    <!-- 확인 모달 -->
+    <div id="confirm-modal" class="modal">
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h3 id="confirm-modal-title">확인</h3>
+            </div>
+            <div class="modal-body">
+                <p id="confirm-modal-message"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeConfirmModal()">취소</button>
+                <button class="btn btn-danger" id="confirm-modal-btn">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 토스트 컨테이너 -->
+    <div id="toast-container"></div>
+
+    <!-- 스크립트 -->
+    <script src="js/data.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/evaluation.js"></script>
+    <script src="js/results.js"></script>
+    <script src="js/management.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

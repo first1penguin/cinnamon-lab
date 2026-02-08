@@ -1,0 +1,15 @@
+/* Powered by 스타일 */
+.powered-by {
+    text-align: center;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+.powered-by strong {
+    color: var(--primary-color);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}

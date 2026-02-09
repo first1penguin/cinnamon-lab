@@ -42,7 +42,7 @@ const INITIAL_EMPLOYEES = [
     { id: 'BE001', name: '정진우', team: 'BE', role: 'team_leader' },
     { id: 'BE002', name: '강동우', team: 'BE', role: 'employee' },
     { id: 'BE003', name: '이윤아', team: 'BE', role: 'employee' },
-    { id: 'BE004', name: '전수현', team: 'BE', role: 'employee' },
+    { id: 'BE004', name: '전수연', team: 'BE', role: 'employee' },
     
     // BG팀
     { id: 'BG001', name: '손진택', team: 'BG', role: 'team_leader' },
@@ -615,3 +615,4 @@ function resetAllData() {
 
 // 초기화 실행
 initializeData();
+

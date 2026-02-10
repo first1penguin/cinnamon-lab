@@ -84,11 +84,10 @@ function getSelectedDate() {
         return JSON.parse(saved);
     }
     // 기본값: 2026년 2월
-    return { year: 2026, month: 2 };
-}
+   return { year: 2026, quarter: 1 };
 
-// 선택된 날짜 저장하기
-function saveSelectedDate(year, month) {
+function saveSelectedDate(year, quarter) {
+
     localStorage.setItem(STORAGE_KEYS.SELECTED_DATE, JSON.stringify({ year, month }));
 }
 
@@ -615,4 +614,5 @@ function resetAllData() {
 
 // 초기화 실행
 initializeData();
+
 

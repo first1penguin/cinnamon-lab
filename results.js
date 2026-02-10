@@ -30,9 +30,9 @@ function renderResultsPage() {
                         <option value="${y}" ${y === selectedDate.year ? 'selected' : ''}>${y}년</option>
                     `).join('')}
                 </select>
-                <select id="result-month">
-                    ${EVALUATION_MONTHS.map(m => `
-                        <option value="${m}" ${m === selectedDate.month ? 'selected' : ''}>${m}월</option>
+                <select id="result-quarter">
+                    ${EVALUATION_QUARTERS.map(q => `
+                        <option value="${q.id}" ${q.id === selectedDate.quarter ? 'selected' : ''}>${q.id}분기</option>
                     `).join('')}
                 </select>
                 <button class="btn btn-secondary btn-sm" id="change-result-date-btn">
@@ -43,7 +43,7 @@ function renderResultsPage() {
         
         <div class="card">
             <div class="card-header">
-                <h3><i class="fas fa-trophy"></i> 팀 종합 평가 결과 (${selectedDate.year}년 ${selectedDate.month}월)</h3>
+                <h3><i class="fas fa-trophy"></i> 팀 종합 평가 결과 (${selectedDate.year}년 ${selectedDate.quarter}분기)</h3>
                 <button class="btn btn-sm btn-secondary" onclick="exportResults()">
                     <i class="fas fa-download"></i> 데이터 내보내기
                 </button>
@@ -155,44 +155,49 @@ function renderAccessDenied() {
     `;
 }
 
+// 팀 상세 차트 렌더링
 function renderTeamDetailChart(team) {
     const scores = getTeamAverageScores(team.id);
-    const chartId = `team-chart-${team.id}`;
+    
+    const chartId = `chart-${team.id}`;
     
     let html = `
-        <div class="mb-4">
-            <h4>
-                <span class="team-badge" style="background-color: ${team.color}">
-                    ${team.name}
+        <div class="team-detail-section mb-4">
+            <h4 style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                <span class="team-badge" style="background-color: ${team.color}">${team.name}</span>
+                <span style="color: var(--text-secondary); font-size: 0.9rem;">
+                    (평균: ${scores.average.toFixed(2)}점, ${scores.count}개 평가)
                 </span>
-                ${team.name}팀
-                <span class="badge badge-secondary ml-2">평가 수: ${scores.count}</span>
             </h4>
-            <div class="chart-container" style="height: 300px;">
+            <div class="chart-container" style="max-width: 500px; margin: 0 auto;">
                 <canvas id="${chartId}"></canvas>
             </div>
         </div>
     `;
     
+    // 차트 렌더링 예약
     setTimeout(() => {
-        createRadarChart(chartId, team.name, scores);
+        createRadarChart(chartId, scores);
     }, 100);
     
     return html;
 }
 
+// 팀별 직원 결과 렌더링
 function renderTeamMembersResults(team) {
     const members = getTeamMembers(team.id);
     
-    if (members.length === 0) return '';
+    if (members.length === 0) {
+        return '';
+    }
     
     let html = `
-        <div class="mb-4">
-            <h4>
-                <span class="team-badge" style="background-color: ${team.color}">
-                    ${team.name}
+        <div class="team-members-results mb-4">
+            <h4 style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                <span class="team-badge" style="background-color: ${team.color}">${team.name}</span>
+                <span style="color: var(--text-secondary); font-size: 0.9rem;">
+                    (${members.length}명)
                 </span>
-                ${team.name}팀 팀원
             </h4>
             <div class="table-container">
                 <table>
@@ -204,7 +209,7 @@ function renderTeamMembersResults(team) {
                             <th>협업 능력</th>
                             <th>커뮤니케이션</th>
                             <th>창의성</th>
-                            <th>평균 점수</th>
+                            <th>평균</th>
                             <th>평가 수</th>
                         </tr>
                     </thead>
@@ -217,13 +222,13 @@ function renderTeamMembersResults(team) {
         
         html += `
             <tr>
-                <td><strong>${member.name}</strong></td>
-                <td><span class="badge ${roleInfo.badge}">${roleInfo.label}</span></td>
-                <td>${scores.count > 0 ? scores.performance.toFixed(2) : '-'}</td>
-                <td>${scores.count > 0 ? scores.collaboration.toFixed(2) : '-'}</td>
-                <td>${scores.count > 0 ? scores.communication.toFixed(2) : '-'}</td>
-                <td>${scores.count > 0 ? scores.creativity.toFixed(2) : '-'}</td>
-                <td><strong>${scores.count > 0 ? scores.average.toFixed(2) : '-'}</strong></td>
+                <td>${member.name}</td>
+                <td><span class="badge badge-${member.role}">${roleInfo.label}</span></td>
+                <td>${scores.performance.toFixed(2)}</td>
+                <td>${scores.collaboration.toFixed(2)}</td>
+                <td>${scores.communication.toFixed(2)}</td>
+                <td>${scores.creativity.toFixed(2)}</td>
+                <td><strong>${scores.average.toFixed(2)}</strong></td>
                 <td>${scores.count}</td>
             </tr>
         `;
@@ -240,22 +245,16 @@ function renderTeamMembersResults(team) {
 }
 
 // 레이더 차트 생성
-function createRadarChart(canvasId, teamName, scores) {
-    const canvas = document.getElementById(canvasId);
-    if (!canvas) return;
+function createRadarChart(canvasId, scores) {
+    const ctx = document.getElementById(canvasId);
+    if (!ctx) return;
     
-    const ctx = canvas.getContext('2d');
-    
-    if (canvas.chart) {
-        canvas.chart.destroy();
-    }
-    
-    canvas.chart = new Chart(ctx, {
+    new Chart(ctx, {
         type: 'radar',
         data: {
             labels: ['업무 성과', '협업 능력', '커뮤니케이션', '창의성'],
             datasets: [{
-                label: teamName,
+                label: '평균 점수',
                 data: [
                     scores.performance,
                     scores.collaboration,
@@ -278,6 +277,7 @@ function createRadarChart(canvasId, teamName, scores) {
                 r: {
                     beginAtZero: true,
                     max: 5,
+                    min: 0,
                     ticks: {
                         stepSize: 1
                     }
@@ -295,28 +295,28 @@ function createRadarChart(canvasId, teamName, scores) {
 // 데이터 내보내기
 function exportResults() {
     const data = exportAllData();
-    
-    const jsonStr = JSON.stringify(data, null, 2);
-    const blob = new Blob([jsonStr], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
-    
     const a = document.createElement('a');
     a.href = url;
     a.download = `evaluation_results_${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(a);
     a.click();
-    
+    document.body.removeChild(a);
     URL.revokeObjectURL(url);
     
-    showToast('데이터가 내보내기 되었습니다.', 'success');
+    showToast('데이터 내보내기 완료!', 'success');
 }
 
 // 결과 날짜 변경 핸들러
 function handleResultDateChange() {
     const year = parseInt(document.getElementById('result-year').value);
-    const month = parseInt(document.getElementById('result-month').value);
+    const quarter = parseInt(document.getElementById('result-quarter').value);
     
-    saveSelectedDate(year, month);
-    showToast(`${year}년 ${month}월 결과로 변경되었습니다.`, 'success');
+    saveSelectedDate(year, quarter);
+    showToast('조회 기간이 변경되었습니다.', 'success');
     
-    setTimeout(() => renderResultsPage(), 300);
+    setTimeout(() => {
+        renderResultsPage();
+    }, 500);
 }

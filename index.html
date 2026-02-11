@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Working Together Review 🤝</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
+    
+    <style>
+/* FIX CSS */
+.page {
+    display: none !important;
+}
+.page.active {
+    display: flex !important;
+}
+#login-page.active,
+#password-setup-page.active {
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
+#main-app.active {
+    display: flex !important;
+    min-height: 100vh;
+}
+
+/* POWERED BY CSS */
+.powered-by {
+    text-align: center;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e2e8f0;
+    color: #64748b;
+    font-size: 0.875rem;
+}
+.powered-by strong {
+    color: #2563eb;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* MAIN STYLES */
+/* ========================================
+   전역 스타일
+   ======================================== */
+:root {
+    --primary-color: #2563eb;
+    --secondary-color: #64748b;
+    --success-color: #10b981;
+    --danger-color: #ef4444;
+    --warning-color: #f59e0b;
+    --info-color: #3b82f6;
+    --background: #f8fafc;
+    --card-background: #ffffff;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --border-color: #e2e8f0;
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--background);
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
+/* ========================================
+   로그인 페이지
+   ======================================== */
+#login-page, #password-setup-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.login-container {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 16px;
+    box-shadow: var(--shadow-lg);
+    width: 100%;
+    max-width: 420px;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.login-header i {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.login-header h1 {
+    font-size: 1.75rem;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.login-header p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
+
+.login-form {
+    width: 100%;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.form-group label i {
+    margin-right: 0.5rem;
+    color: var(--primary-color);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.form-group small {
+    display: block;
+    margin-top: 0.25rem;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* ========================================
+   버튼 스타일
+   ======================================== */
+.btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    color: white;
+    width: 100%;
+    justify-content: center;
+}
+
+.btn-primary:hover {
+    background: #1d4ed8;
+}
+
+.btn-secondary {
+    background: var(--secondary-color);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #475569;
+}
+
+.btn-success {
+    background: var(--success-color);
+    color: white;
+}
+
+.btn-danger {
+    background: var(--danger-color);
+    color: white;
+}
+
+.btn-warning {
+    background: var(--warning-color);
+    color: white;
+}
+
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+}
+
+.btn-icon {
+    padding: 0.5rem;
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ========================================
+   메인 앱 레이아웃
+   ======================================== */
+#main-app {
+    display: flex;
+    min-height: 100vh;
+}
+
+#sidebar {
+    width: 260px;
+    background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-lg);
+}
+
+.sidebar-header {
+    padding: 1.5rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-header i {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: var(--primary-color);
+}
+
+.sidebar-header span {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+#sidebar-nav {
+    flex: 1;
+    padding: 1rem 0;
+    overflow-y: auto;
+}
+
+.nav-item {
+    padding: 0.875rem 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.nav-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.nav-item.active {
+    background: var(--primary-color);
+    color: white;
+    border-left: 4px solid white;
+}
+
+.nav-item i {
+    width: 20px;
+}
+
+.sidebar-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-md);
+    margin-bottom: 0.75rem;
+}
+
+.user-info i {
+    font-size: 2rem;
+    color: var(--primary-color);
+}
+
+.user-details {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.user-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.user-role {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.btn-logout {
+    width: 100%;
+    padding: 0.75rem;
+    background: rgba(239, 68, 68, 0.2);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.btn-logout:hover {
+    background: var(--danger-color);
+}
+
+/* ========================================
+   메인 콘텐츠
+   ======================================== */
+#main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.content-header {
+    background: white;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--shadow);
+}
+
+.content-header h1 {
+    font-size: 1.75rem;
+    color: var(--text-primary);
+}
+
+.header-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+#current-time {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.page-content {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+/* ========================================
+   카드
+   ======================================== */
+.card {
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    margin-bottom: 1.5rem;
+}
+
+.card-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-header h3 {
+    font-size: 1.25rem;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+/* ========================================
+   통계 그리드
+   ======================================== */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    border-left: 4px solid var(--primary-color);
+}
+
+.stat-card.success {
+    border-left-color: var(--success-color);
+}
+
+.stat-card.warning {
+    border-left-color: var(--warning-color);
+}
+
+.stat-card.danger {
+    border-left-color: var(--danger-color);
+}
+
+.stat-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.stat-card-title {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.stat-card-icon {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    opacity: 0.5;
+}
+
+.stat-card-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.stat-card-subtitle {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+/* ========================================
+   배지
+   ======================================== */
+.badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.badge-admin {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.badge-leader {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.badge-employee {
+    background: #e0e7ff;
+    color: #3730a3;
+}
+
+.badge-success {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.badge-secondary {
+    background: #f1f5f9;
+    color: #475569;
+}
+
+.team-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: white;
+}
+
+/* ========================================
+   테이블
+   ======================================== */
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table thead {
+    background: var(--background);
+}
+
+table th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--border-color);
+}
+
+table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+table tbody tr:hover {
+    background: var(--background);
+}
+
+/* ========================================
+   평가 페이지
+   ======================================== */
+.evaluation-header {
+    margin-bottom: 2rem;
+}
+
+.evaluation-progress {
+    background: white;
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    margin-bottom: 1.5rem;
+}
+
+.progress-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+}
+
+.progress-percent {
+    color: var(--primary-color);
+    font-size: 1.25rem;
+}
+
+.progress-bar {
+    height: 12px;
+    background: var(--border-color);
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-color), var(--success-color));
+    transition: width 0.5s;
+}
+
+.progress-detail {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.evaluation-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.evaluation-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    padding: 1.5rem;
+    border: 2px solid transparent;
+    transition: all 0.3s;
+}
+
+.evaluation-card.completed {
+    border-color: var(--success-color);
+    background: #f0fdf4;
+}
+
+.evaluation-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.team-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.team-info h3 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.status-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.status-badge.completed {
+    background: var(--success-color);
+    color: white;
+}
+
+.status-badge.pending {
+    background: var(--warning-color);
+    color: white;
+}
+
+.evaluation-item {
+    margin-bottom: 1.5rem;
+}
+
+.evaluation-item.compact {
+    margin-bottom: 1rem;
+}
+
+.evaluation-item-header {
+    margin-bottom: 0.75rem;
+}
+
+.evaluation-item-header strong {
+    display: block;
+    margin-bottom: 0.25rem;
+    color: var(--text-primary);
+}
+
+.evaluation-description {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.rating-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.rating-btn {
+    flex: 1;
+    padding: 0.75rem;
+    border: 2px solid var(--border-color);
+    background: white;
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.rating-btn:hover:not(:disabled) {
+    border-color: var(--primary-color);
+    background: #eff6ff;
+}
+
+.rating-btn.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.rating-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ========================================
+   팀원 평가 그리드
+   ======================================== */
+.team-section {
+    margin-bottom: 2rem;
+}
+
+.team-section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+}
+
+.team-members-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+}
+
+.member-card {
+    border: 2px solid var(--border-color);
+}
+
+.member-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.member-info i {
+    font-size: 2rem;
+    color: var(--primary-color);
+}
+
+.member-info h4 {
+    margin: 0 0 0.25rem 0;
+}
+
+.role-badge {
+    font-size: 0.75rem;
+}
+
+/* ========================================
+   날짜 선택
+   ======================================== */
+.date-selector {
+    background: white;
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    margin-bottom: 1.5rem;
+}
+
+.date-inputs {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+}
+
+.date-inputs select {
+    flex: 1;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+}
+
+.warning-text {
+    margin-top: 0.75rem;
+    color: var(--warning-color);
+    font-weight: 600;
+}
+
+/* ========================================
+   모달
+   ======================================== */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    border-radius: var(--radius-lg);
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+}
+
+.modal-small {
+    max-width: 400px;
+}
+
+.modal-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    margin: 0;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-secondary);
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s;
+}
+
+.modal-close:hover {
+    background: var(--background);
+    color: var(--text-primary);
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.modal-footer {
+    padding: 1.5rem;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+}
+
+/* ========================================
+   색상 선택기
+   ======================================== */
+.color-picker-container {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+#team-color {
+    width: 80px;
+    height: 50px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+}
+
+.color-preview {
+    flex: 1;
+    height: 50px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    border: 1px solid var(--border-color);
+}
+
+/* ========================================
+   팀 관리 그리드
+   ======================================== */
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.team-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.team-card-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.team-card-name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-top: 0.5rem;
+}
+
+.team-card-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.team-card-body {
+    padding: 1.5rem;
+}
+
+.team-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    color: var(--text-secondary);
+}
+
+/* ========================================
+   메시지
+   ======================================== */
+.error-message {
+    display: none;
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    background: #fee2e2;
+    color: #991b1b;
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--danger-color);
+}
+
+.error-message.show {
+    display: block;
+}
+
+.success-message {
+    display: none;
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    background: #d1fae5;
+    color: #065f46;
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--success-color);
+}
+
+.success-message.show {
+    display: block;
+}
+
+/* ========================================
+   토스트
+   ======================================== */
+#toast-container {
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.toast {
+    background: white;
+    padding: 1rem 1.5rem;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 300px;
+    animation: slideIn 0.3s ease-out;
+    transition: opacity 0.3s;
+}
+
+.toast.success {
+    border-left: 4px solid var(--success-color);
+}
+
+.toast.error {
+    border-left: 4px solid var(--danger-color);
+}
+
+.toast.warning {
+    border-left: 4px solid var(--warning-color);
+}
+
+.toast.info {
+    border-left: 4px solid var(--info-color);
+}
+
+.toast-icon {
+    font-size: 1.25rem;
+}
+
+.toast.success .toast-icon {
+    color: var(--success-color);
+}
+
+.toast.error .toast-icon {
+    color: var(--danger-color);
+}
+
+.toast.warning .toast-icon {
+    color: var(--warning-color);
+}
+
+.toast.info .toast-icon {
+    color: var(--info-color);
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* ========================================
+   차트 컨테이너
+   ======================================== */
+.chart-container {
+    position: relative;
+    margin: 1.5rem 0;
+}
+
+/* ========================================
+   유틸리티
+   ======================================== */
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-3 { margin-bottom: 1.5rem; }
+.mb-4 { margin-bottom: 2rem; }
+.ml-1 { margin-left: 0.5rem; }
+.mr-1 { margin-right: 0.5rem; }
+
+.text-center { text-align: center; }
+
+/* ========================================
+   반응형
+   ======================================== */
+@media (max-width: 768px) {
+    #main-app {
+        flex-direction: column;
+    }
+    
+    #sidebar {
+        width: 100%;
+        height: auto;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .team-members-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .team-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .page-content {
+        padding: 1rem;
+    }
+    
+    #toast-container {
+        top: 1rem;
+        right: 1rem;
+        left: 1rem;
+    }
+    
+    .toast {
+        min-width: auto;
+    }
+}
+    </style>
+
+</head>
+<body>
+    <!-- 로그인 페이지 -->
+    <div id="login-page" class="page active">
+        <div class="login-container">
+            <div class="login-header">
+                <i class="fas fa-users-cog"></i>
+                <h1 id="system-title-display">Working Together Review 🤝</h1>
+            </div>
+            <form id="login-form" class="login-form">
+                <div class="form-group">
+                    <label for="login-name"><i class="fas fa-user"></i> 이름</label>
+                    <input type="text" id="login-name" placeholder="이름을 입력하세요">
+                </div>
+                <div class="form-group">
+                    <label for="login-password"><i class="fas fa-lock"></i> 비밀번호</label>
+                    <input type="password" id="login-password" placeholder="비밀번호를 입력하세요">
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-sign-in-alt"></i> 로그인
+                </button>
+                <div id="login-error" class="error-message"></div>
+                <div class="powered-by">
+                    powered by <strong>CINNAMON LAB</strong>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 비밀번호 설정 페이지 -->
+    <div id="password-setup-page" class="page">
+        <div class="login-container">
+            <div class="login-header">
+                <i class="fas fa-key"></i>
+                <h1>비밀번호 설정</h1>
+                <p>첫 로그인입니다. 비밀번호를 설정해주세요.</p>
+            </div>
+            <form id="password-setup-form" class="login-form">
+                <div class="form-group">
+                    <label for="setup-password"><i class="fas fa-lock"></i> 새 비밀번호</label>
+                    <input type="password" id="setup-password" placeholder="비밀번호 (최소 4자)">
+                </div>
+                <div class="form-group">
+                    <label for="setup-password-confirm"><i class="fas fa-lock"></i> 비밀번호 확인</label>
+                    <input type="password" id="setup-password-confirm" placeholder="비밀번호 확인">
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-check"></i> 비밀번호 설정
+                </button>
+                <div id="setup-error" class="error-message"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 메인 앱 -->
+    <div id="main-app" class="page">
+        <aside id="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-chart-line"></i>
+                <span id="sidebar-title-display">Review 🤝</span>
+            </div>
+            <nav id="sidebar-nav"></nav>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <i class="fas fa-user-circle"></i>
+                    <div class="user-details">
+                        <span id="user-name" class="user-name"></span>
+                        <span id="user-role" class="user-role"></span>
+                    </div>
+                </div>
+                <button id="logout-btn" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> 로그아웃
+                </button>
+            </div>
+        </aside>
+
+        <main id="main-content">
+            <header class="content-header">
+                <h1 id="page-title">대시보드</h1>
+                <div class="header-actions">
+                    <span id="current-time"></span>
+                </div>
+            </header>
+            <div id="page-content" class="page-content"></div>
+        </main>
+    </div>
+
+    <!-- 직원 모달 -->
+    <div id="employee-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="employee-modal-title">직원 추가</h3>
+                <button class="modal-close" onclick="closeEmployeeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="emp-name">이름 *</label>
+                    <input type="text" id="emp-name" placeholder="팀원 이름">
+                </div>
+                <div class="form-group">
+                    <label for="emp-team">팀 *</label>
+                    <select id="emp-team">
+                        <option value="">팀 선택</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="emp-role">역할 *</label>
+                    <select id="emp-role">
+                        <option value="employee">팀원</option>
+                        <option value="team_leader">팀장</option>
+                        <option value="admin">관리자</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="emp-password">초기 비밀번호 (선택)</label>
+                    <input type="password" id="emp-password" placeholder="미설정 시 첫 로그인에 설정">
+                    <small>비워두면 첫 로그인 시 해당 직원이 직접 설정합니다.</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeEmployeeModal()">취소</button>
+                <button class="btn btn-primary" id="save-employee-btn">저장</button>
+            </div>
+            <div id="employee-modal-error" class="error-message"></div>
+        </div>
+    </div>
+
+    <!-- 팀 모달 -->
+    <div id="team-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="team-modal-title">팀 추가</h3>
+                <button class="modal-close" onclick="closeTeamModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="team-id">팀 ID *</label>
+                    <input type="text" id="team-id" placeholder="예: BA, BD, BE (2-4자)">
+                    <small>팀 ID는 수정할 수 없습니다.</small>
+                </div>
+                <div class="form-group">
+                    <label for="team-name">팀 이름 *</label>
+                    <input type="text" id="team-name" placeholder="팀 이름">
+                </div>
+                <div class="form-group">
+                    <label for="team-color">팀 색상 *</label>
+                    <div class="color-picker-container">
+                        <input type="color" id="team-color" value="#3b82f6">
+                        <span id="team-color-preview" class="color-preview"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeTeamModal()">취소</button>
+                <button class="btn btn-primary" id="save-team-btn">저장</button>
+            </div>
+            <div id="team-modal-error" class="error-message"></div>
+        </div>
+    </div>
+
+    <!-- 확인 모달 -->
+    <div id="confirm-modal" class="modal">
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h3 id="confirm-modal-title">확인</h3>
+            </div>
+            <div class="modal-body">
+                <p id="confirm-modal-message"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeConfirmModal()">취소</button>
+                <button class="btn btn-danger" id="confirm-modal-btn">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 토스트 컨테이너 -->
+    <div id="toast-container"></div>
+
+    <!-- 스크립트 -->
+    <script src="data.js"></script>
+    <script src="api.js"></script>
+    <script src="auth.js"></script>
+    <script src="app.js"></script>
+    <script src="evaluation.js"></script>
+    <script src="results.js"></script>
+    <script src="management.js"></script>
+</body>
+</html>
